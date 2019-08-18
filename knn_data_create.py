@@ -14,9 +14,10 @@ def generate_data(client, bqstorageclient):
                                     , 'c', 'typescript', 'shell', 'swift'
                                     , 'scala', 'objective-c') then 'Other'
         else Language END AS language_category
-        FROM github_project.langauges
+        FROM github_project.langauges    
         ORDER BY repo_name
-        LIMIT 100000"""
+        
+        """
 
     language_query_dataframe = (
         client.query(language_query)
@@ -28,7 +29,7 @@ def generate_data(client, bqstorageclient):
         SELECT Commit, Author, repo as repo_name
         FROM github_project.commits
         ORDER BY repo
-        LIMIT 100000
+        LIMIT 1000000
         """
 
     commit_query_dataframe = (
@@ -53,10 +54,4 @@ def generate_data(client, bqstorageclient):
 
 
 
-#knn_data, svm_data = train_test_split(master_query_dataframe, test_size=0.4, random_state=42)
 
-
-#table = master_query_dataframe.groupby('language_category').agg({'Language': 'nunique'})
-
-
-#print(commit_query_dataframe)
