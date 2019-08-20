@@ -16,6 +16,8 @@ bqstorageclient = bigquery_storage_v1beta1.BigQueryStorageClient(
     credentials=credentials
 )
 
+print('Loaded credentials')
+
 
 def bq_create_dataset(client, dataset):
     bigquery_client = client
@@ -44,6 +46,8 @@ def bq_create_table(client, dataset, tablename, schemaref):
         table = bigquery_client.create_table(table)
         print('table {} created.'.format(table.table_id))
 
+
+print('Functions created')
 
 unlabeled_data_schema = [
             bigquery.SchemaField('author', 'STRING', mode='REQUIRED'),
@@ -90,8 +94,9 @@ kmeans_data_schema = [
             bigquery.SchemaField('shell', 'INTEGER', mode='REQUIRED'),
             bigquery.SchemaField('swift', 'INTEGER', mode='REQUIRED'),
             bigquery.SchemaField('typescript', 'INTEGER', mode='REQUIRED')
+    ]
 
-        ]
+print('Schemas designed')
 
 raw_data_import = kdc.generate_data(client, bqstorageclient)
 raw_data_import = raw_data_import.rename(columns={'Author': 'author', 'repo_name': 'repo_count'
@@ -103,8 +108,15 @@ raw_data_import = raw_data_import.rename(columns={'Author': 'author', 'repo_name
                                                   , 'Ruby': 'ruby', 'Scala': 'scala', 'Shell': 'shell'
                                                   , 'Swift': 'swift', 'TypeScript': 'typescript'})
 
+print('Raw data imported')
+print(raw_data_import.head())
+
+
+
 kmeans_data = raw_data_import.sample(frac=0.75, replace=False, random_state=42)
 unlabeled_data = raw_data_import.drop(kmeans_data.index)
+
+print('Data created and ready')
 
 #kmeans_data.to_csv('kmeans_source.csv')
 #unlabeled_data.to_csv('unlabeled.csv')
@@ -116,6 +128,8 @@ unlabeled_data = raw_data_import.drop(kmeans_data.index)
 
 pandas_gbq.to_gbq(kmeans_data, 'github_project.kmeans_data', project_id=project_id, if_exists='replace')
 pandas_gbq.to_gbq(unlabeled_data, 'github_project.unlabeled_data', project_id=project_id, if_exists='replace')
+
+print('BigQuery tables written successfully!')
 
 print(list(kmeans_data.columns))
 

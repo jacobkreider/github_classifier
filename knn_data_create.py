@@ -17,6 +17,7 @@ def generate_data(client, bqstorageclient):
         FROM github_project.langauges    
         ORDER BY repo_name
         
+        
         """
 
     language_query_dataframe = (
@@ -45,7 +46,7 @@ def generate_data(client, bqstorageclient):
 
     language_pivot = pd.pivot_table(merged_data, values='Commit', index=['Author']
                                 , columns=['language_category'], aggfunc=np.sum
-                                , fill_value=0)
+                                , fill_value=0).reset_index()
 
     final_cluster_data = pd.merge(main_cluster_data, language_pivot, on='Author')
 

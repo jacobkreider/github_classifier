@@ -11,7 +11,7 @@ import numpy as np
 import pandas_gbq
 
 credentials = service_account.Credentials.from_service_account_file(
-    'msds434-8ba0bd83467d.json')
+    'msds434-ace22f00852e.json')
 project_id = 'msds434'
 bigquery_dataset = 'github_project'
 client = bigquery.Client(credentials= credentials, project=project_id)
@@ -22,7 +22,7 @@ bqstorageclient = bigquery_storage_v1beta1.BigQueryStorageClient(
 
 kmeans_source_query = """
         SELECT * FROM
-        github_project.kmeans_source
+        github_project.kmeans_data
         """
 
 unlabeled_data = (
@@ -51,7 +51,7 @@ unlabeled_standardized[col_names] = unlabeled_copy_standardized
 
 # Create elbow plot to find number of clusters
 
-plt.figure(figsize=(10, 8))
+"""plt.figure(figsize=(10, 8))
 wcss = []
 for i in range(1, 11):
     kmeans = KMeans(n_clusters = i, init = 'k-means++', random_state=42)
@@ -62,10 +62,10 @@ plt.title('The Elbow Method')
 plt.xlabel('Number of Clusters')
 plt.ylabel('WCSS')
 plt.show()
-
+"""
 
 # Fitting k-means to the data
-kmeans = KMeans(n_clusters = 6, init = 'k-means++', random_state = 42)
+kmeans = KMeans(n_clusters = 4, init = 'k-means++', random_state = 42)
 y_kmeans = kmeans.fit_predict(unlabeled_copy_standardized)
 
 # beginning of  the cluster numbering with 1 instead of 0
@@ -77,35 +77,34 @@ cluster = pd.DataFrame(y_kmeans1)
 unlabeled_data['cluster'] = cluster
 # Mean of clusters
 kmeans_mean_cluster = pd.DataFrame(round(unlabeled_data.groupby('cluster').mean(), 1))
-stats_cluster = pd.DataFrame(unlabeled_data.groupby('cluster').agg({'Author':'nunique'}))
+stats_cluster = pd.DataFrame(unlabeled_data.groupby('cluster').agg({'author':'nunique'}))
 print(kmeans_mean_cluster)
 print(stats_cluster)
+
+
+
 
 def cluster_names(row):
     if row['cluster'] == 1:
         val = 'Inexperienced Beginner'
     elif row['cluster'] == 2:
-        val = 'Medium Variety, Medium Volume, Medium Language Mix'
+        val = 'High Variety and Production, Balanced Language Use'
     elif row['cluster'] == 3:
-        val = 'Low Variety, High Volume, JavaScript/CSS/Shell Focused'
+        val = 'Medium Variety, High Production, Python-Focused'
     elif row['cluster'] == 4:
-        val = 'High Variety, Low Volume, Medium Language Mix'
-    elif row['cluster'] == 5:
-        val = 'High Variety, Medium Volume, Medium Language Mix'
-    elif row['cluster'] == 6:
-        val = 'Low Variety, Medium Volume, High Language Mix'
+        val = 'Medium Variety, High Production, JavaScript/CSS Focused'
     else:
         val = 'MISSED SOMETHING'
     return val
 
 labeled_data = unlabeled_data
 labeled_data['Cluster_Name'] = labeled_data.apply(cluster_names, axis=1)
+print('Data successfully labeled')
 
 pandas_gbq.to_gbq(labeled_data, 'github_project.labeled_data', project_id=project_id, if_exists='replace')
 print('Data successfully transferred to BigQuery')
 print('Exiting program now')
 
 
-#labeled_data.to_csv('labeled_data.csv')
-kmeans_mean_cluster_stats = pd.DataFrame(round(labeled_data.groupby('Cluster_Name').mean(), 1))
-#kmeans_mean_cluster_stats.to_csv('FinalStats.csv')
+
+
