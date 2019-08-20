@@ -1,14 +1,13 @@
 from google.cloud import bigquery
 from google.oauth2 import service_account
 from google.cloud import bigquery_storage_v1beta1
-from sklearn.model_selection import train_test_split
 import knn_data_create as kdc
 import numpy as np
 import pandas_gbq
 
 credentials = service_account.Credentials.from_service_account_file(
-    'msds434-ace22f00852e.json')
-project_id = 'msds434'
+    'poach-easy-cred.json')
+project_id = 'poach-easy'
 bigquery_dataset = 'github_project'
 client = bigquery.Client(credentials= credentials, project=project_id)
 
@@ -118,8 +117,7 @@ unlabeled_data = raw_data_import.drop(kmeans_data.index)
 
 print('Data created and ready')
 
-#kmeans_data.to_csv('kmeans_source.csv')
-#unlabeled_data.to_csv('unlabeled.csv')
+
 
 
 
