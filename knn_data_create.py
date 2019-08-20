@@ -14,7 +14,7 @@ def generate_data(client, bqstorageclient):
                                     , 'c', 'typescript', 'shell', 'swift'
                                     , 'scala', 'objective-c') then 'Other'
         else Language END AS language_category
-        FROM github_project.langauges    
+        FROM github_project.languages    
         ORDER BY repo_name
         
         
