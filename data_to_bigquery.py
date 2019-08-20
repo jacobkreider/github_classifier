@@ -106,16 +106,16 @@ raw_data_import = raw_data_import.rename(columns={'Author': 'author', 'repo_name
 kmeans_data = raw_data_import.sample(frac=0.75, replace=False, random_state=42)
 unlabeled_data = raw_data_import.drop(kmeans_data.index)
 
-kmeans_data.to_csv('kmeans_source.csv')
-unlabeled_data.to_csv('unlabeled.csv')
+#kmeans_data.to_csv('kmeans_source.csv')
+#unlabeled_data.to_csv('unlabeled.csv')
 
 
 
 #bq_create_table(client, bigquery_dataset, unlabeled_data, unlabeled_data_schema)
 #bq_create_table(client, bigquery_dataset, kmeans_data, kmeans_data_schema)
 
-#pandas_gbq.to_gbq(kmeans_data, 'github_project.kmeans_data', project_id=project_id, if_exists='replace', table_schema=kmeans_data_schema)
-#pandas_gbq.to_gbq(unlabeled_data, 'github_project.unlabeled_data', project_id=project_id, if_exists='replace', table_schema=unlabeled_data_schema)
+pandas_gbq.to_gbq(kmeans_data, 'github_project.kmeans_data', project_id=project_id, if_exists='replace')
+pandas_gbq.to_gbq(unlabeled_data, 'github_project.unlabeled_data', project_id=project_id, if_exists='replace')
 
 print(list(kmeans_data.columns))
 
