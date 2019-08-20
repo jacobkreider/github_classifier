@@ -50,7 +50,7 @@ unlabeled_copy_standardized = pd.DataFrame(unlabeled_copy_standardized)
 unlabeled_standardized[col_names] = unlabeled_copy_standardized
 
 # Create elbow plot to find number of clusters
-"""
+
 plt.figure(figsize=(10, 8))
 wcss = []
 for i in range(1, 11):
@@ -62,7 +62,7 @@ plt.title('The Elbow Method')
 plt.xlabel('Number of Clusters')
 plt.ylabel('WCSS')
 plt.show()
-"""
+
 
 # Fitting k-means to the data
 kmeans = KMeans(n_clusters = 6, init = 'k-means++', random_state = 42)
@@ -101,6 +101,11 @@ def cluster_names(row):
 labeled_data = unlabeled_data
 labeled_data['Cluster_Name'] = labeled_data.apply(cluster_names, axis=1)
 
-labeled_data.to_csv('labeled_data.csv')
+pandas_gbq.to_gbq(labeled_data, 'github_project.labeled_data', project_id=project_id, if_exists='replace')
+print('Data successfully transferred to BigQuery')
+print('Exiting program now')
+
+
+#labeled_data.to_csv('labeled_data.csv')
 kmeans_mean_cluster_stats = pd.DataFrame(round(labeled_data.groupby('Cluster_Name').mean(), 1))
-kmeans_mean_cluster_stats.to_csv('FinalStats.csv')
+#kmeans_mean_cluster_stats.to_csv('FinalStats.csv')

@@ -124,3 +124,5 @@ print(len(kmeans_data))
 print(len(unlabeled_data))
 print(np.shape(kmeans_data))
 print(np.shape(unlabeled_data))
+
+print('Success. Exiting program now')
