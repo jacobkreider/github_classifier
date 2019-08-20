@@ -29,7 +29,7 @@ def generate_data(client, bqstorageclient):
         SELECT Commit, Author, repo as repo_name
         FROM github_project.commits
         ORDER BY repo
-        LIMIT 1000000
+        LIMIT 10000000
         """
 
     commit_query_dataframe = (
