@@ -6,7 +6,7 @@ import numpy as np
 import pandas_gbq
 
 credentials = service_account.Credentials.from_service_account_file(
-    'poach-easy-cred.json')
+'credential-2.json')
 project_id = 'poach-easy-2019'
 bigquery_dataset = 'github_project'
 client = bigquery.Client(credentials= credentials, project=project_id)
