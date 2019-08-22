@@ -13,8 +13,9 @@ import pandas_gbq
 credentials = service_account.Credentials.from_service_account_file(
     'poach-easy-cred.json')
 project_id = 'poach-easy'
-bigquery_dataset = 'github_project'
 client = bigquery.Client(credentials= credentials, project=project_id)
+bigquery_dataset = client.dataset('github_project')
+labeled_data_ref = bigquery_dataset.table('labeled_data_dev')
 
 bqstorageclient = bigquery_storage_v1beta1.BigQueryStorageClient(
     credentials=credentials
@@ -97,11 +98,14 @@ def cluster_names(row):
         val = 'MISSED SOMETHING'
     return val
 
+
 labeled_data = unlabeled_data
 labeled_data['Cluster_Name'] = labeled_data.apply(cluster_names, axis=1)
 print('Data successfully labeled')
 
-pandas_gbq.to_gbq(labeled_data, 'github_project.labeled_data', project_id=project_id, if_exists='replace')
+# pandas_gbq.to_gbq(labeled_data, 'github_project.labeled_data', project_id=project_id, if_exists='replace')
+client.load_table_from_dataframe(labeled_data, labeled_data_ref).result()
+
 print('Data successfully transferred to BigQuery')
 print('Exiting program now')
 

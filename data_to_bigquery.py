@@ -8,8 +8,11 @@ import pandas_gbq
 credentials = service_account.Credentials.from_service_account_file(
 'credential-2.json')
 project_id = 'poach-easy-2019'
-bigquery_dataset = 'github_project'
+
 client = bigquery.Client(credentials= credentials, project=project_id)
+bigquery_dataset = client.dataset('github_project')
+kmeans_data_ref = bigquery_dataset.table('kmeans_data_dev')
+unlabeled_data_ref = bigquery_dataset.table('unlabeled_data_dev')
 
 bqstorageclient = bigquery_storage_v1beta1.BigQueryStorageClient(
     credentials=credentials
@@ -124,8 +127,10 @@ print('Data created and ready')
 #bq_create_table(client, bigquery_dataset, unlabeled_data, unlabeled_data_schema)
 #bq_create_table(client, bigquery_dataset, kmeans_data, kmeans_data_schema)
 
-pandas_gbq.to_gbq(kmeans_data, 'github_project.kmeans_data', project_id=project_id, if_exists='replace')
-pandas_gbq.to_gbq(unlabeled_data, 'github_project.unlabeled_data', project_id=project_id, if_exists='replace')
+#pandas_gbq.to_gbq(kmeans_data, 'github_project.kmeans_data', project_id=project_id, if_exists='replace')
+#pandas_gbq.to_gbq(unlabeled_data, 'github_project.unlabeled_data', project_id=project_id, if_exists='replace')
+
+client.load_table_from_dataframe(kmeans_data, kmeans_data_ref).result()
 
 print('BigQuery tables written successfully!')
 
