@@ -23,7 +23,7 @@ bqstorageclient = bigquery_storage_v1beta1.BigQueryStorageClient(
 
 kmeans_source_query = """
         SELECT * FROM
-        github_project.kmeans_data
+        github_project.kmeans_data_dev
         """
 
 unlabeled_data = (
