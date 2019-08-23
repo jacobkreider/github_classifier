@@ -1,0 +1,4 @@
+cron:
+- url : /bigquery
+  schedule: 1 of month 07:00
+ 

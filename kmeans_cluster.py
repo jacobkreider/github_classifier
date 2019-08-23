@@ -103,9 +103,47 @@ labeled_data = unlabeled_data
 labeled_data['Cluster_Name'] = labeled_data.apply(cluster_names, axis=1)
 print('Data successfully labeled')
 
-# pandas_gbq.to_gbq(labeled_data, 'github_project.labeled_data', project_id=project_id, if_exists='replace')
-client.load_table_from_dataframe(labeled_data, labeled_data_ref).result()
+pandas_gbq.to_gbq(labeled_data, 'github_project.labeled_data_dev', project_id=project_id, if_exists='replace')
+#client.load_table_from_dataframe(labeled_data, labeled_data_ref).result()
+"""
+labeled_data_1 = labeled_data.sample(frac=0.1, replace=False, random_state=42)
+labeled_data_2a = labeled_data.drop(labeled_data_1.index)
 
+labeled_data_2 = labeled_data_2a.sample(frac=0.1, replace=False, random_state=42)
+labeled_data_3a = labeled_data_2a.drop(labeled_data_2.index)
+
+labeled_data_3 = labeled_data_3a.sample(frac=0.1, replace=False, random_state=42)
+labeled_data_4a = labeled_data_3a.drop(labeled_data_3.index)
+
+labeled_data_4 = labeled_data_4a.sample(frac=0.1, replace=False, random_state=42)
+labeled_data_5a = labeled_data_4a.drop(labeled_data_4.index)
+
+labeled_data_5 = labeled_data_5a.sample(frac=0.1, replace=False, random_state=42)
+labeled_data_6a = labeled_data_5a.drop(labeled_data_5.index)
+
+labeled_data_6 = labeled_data_6a.sample(frac=0.1, replace=False, random_state=42)
+labeled_data_7a = labeled_data_6a.drop(labeled_data_6.index)
+
+labeled_data_7 = labeled_data_7a.sample(frac=0.1, replace=False, random_state=42)
+labeled_data_8a = labeled_data_7a.drop(labeled_data_7.index)
+
+labeled_data_8 = labeled_data_8a.sample(frac=0.1, replace=False, random_state=42)
+labeled_data_9a = labeled_data_8a.drop(labeled_data_8.index)
+
+labeled_data_9 = labeled_data_9a.sample(frac=0.1, replace=False, random_state=42)
+labeled_data_10 = labeled_data_9a.drop(labeled_data_9.index)
+
+labeled_data_1.to_csv('labeled_data_1.csv')
+labeled_data_2.to_csv('labeled_data_2.csv')
+labeled_data_3.to_csv('labeled_data_3.csv')
+labeled_data_4.to_csv('labeled_data_4.csv')
+labeled_data_5.to_csv('labeled_data_5.csv')
+labeled_data_6.to_csv('labeled_data_6.csv')
+labeled_data_7.to_csv('labeled_data_7.csv')
+labeled_data_8.to_csv('labeled_data_8.csv')
+labeled_data_9.to_csv('labeled_data_9.csv')
+labeled_data_10.to_csv('labeled_data_10.csv')
+"""
 print('Data successfully transferred to BigQuery')
 print('Exiting program now')
 
