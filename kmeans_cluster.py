@@ -11,8 +11,8 @@ import numpy as np
 import pandas_gbq
 
 credentials = service_account.Credentials.from_service_account_file(
-    'poach-easy-cred.json')
-project_id = 'poach-easy'
+    'credential-2.json')
+project_id = 'poach-easy-2019'
 client = bigquery.Client(credentials= credentials, project=project_id)
 bigquery_dataset = client.dataset('github_project')
 labeled_data_ref = bigquery_dataset.table('labeled_data_dev')
