@@ -22,7 +22,7 @@ from google.oauth2 import service_account
 
 app = flask.Flask(__name__)
 credentials = service_account.Credentials.from_service_account_file(
-    'credential-2.json')
+    'credentials-poach-easy.json')
 project_id = 'poach-easy-2019'
 bigquery_client = bigquery.Client(credentials= credentials, project=project_id)
 
