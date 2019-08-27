@@ -11,8 +11,8 @@ import numpy as np
 import pandas_gbq
 
 credentials = service_account.Credentials.from_service_account_file(
-    'credentials-poach-easy.json')
-project_id = 'poach-easy-2019'
+    'main-credentials.json')
+project_id = 'poach-easy-2'
 client = bigquery.Client(credentials= credentials, project=project_id)
 bigquery_dataset = client.dataset('github_project')
 labeled_data_ref = bigquery_dataset.table('labeled_data_dev')
@@ -104,7 +104,7 @@ labeled_data['Cluster_Name'] = labeled_data.apply(cluster_names, axis=1)
 print('Data successfully labeled')
 
 pandas_gbq.to_gbq(labeled_data, 'github_project.labeled_data_dev', project_id=project_id, if_exists='replace')
-#client.load_table_from_dataframe(labeled_data, labeled_data_ref).result()
+# client.load_table_from_dataframe(labeled_data, labeled_data_ref).result()
 """
 labeled_data_1 = labeled_data.sample(frac=0.1, replace=False, random_state=42)
 labeled_data_2a = labeled_data.drop(labeled_data_1.index)
