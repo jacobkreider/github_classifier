@@ -18,9 +18,10 @@ def main():
     
     query_job = bigquery_client.query(
         """
-        SELECT *
+        SELECT DISTINCT *
         
         FROM github_project.labeled_data_dev
+        WHERE cluster = 1
         ORDER BY commits DESC
         LIMIT 10
     """
@@ -34,6 +35,7 @@ def main():
             location=query_job.location,
         )
     )
+
 
 
 @app.route("/results")
