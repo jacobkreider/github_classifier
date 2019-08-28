@@ -18,12 +18,22 @@ def main():
     
     query_job = bigquery_client.query(
         """
-        SELECT DISTINCT *
+        SELECT *
+        FROM (
+            SELECT author, repo_count, commits, languages, cluster
+                , Cluster_Name, Rank()
+                over (Partition BY Cluster_Name
+                ORDER BY commits DESC ) AS Rank
+            FROM(
+
+                SELECT author, repo_count, commits, languages, cluster
+                    , Cluster_Name, row_number()
+                    over (Partition BY author 
+                    ORDER BY commits DESC) as row_num
+                FROM github_project.labeled_data_dev)
+                WHERE row_num = 1)
+        WHERE Rank <= 10
         
-        FROM github_project.labeled_data_dev
-        WHERE cluster = 1
-        ORDER BY commits DESC
-        LIMIT 10
     """
     )
 

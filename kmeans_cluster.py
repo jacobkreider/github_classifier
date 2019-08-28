@@ -2,13 +2,11 @@ from google.cloud import bigquery
 from google.oauth2 import service_account
 from google.cloud import bigquery_storage_v1beta1
 from sklearn import preprocessing
-import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 import pandas as pd
-from sklearn.compose import ColumnTransformer
-import knn_data_create as kdc
-import numpy as np
+
 import pandas_gbq
+import random
 
 credentials = service_account.Credentials.from_service_account_file(
     'main-credentials.json')
@@ -98,10 +96,26 @@ def cluster_names(row):
         val = 'MISSED SOMETHING'
     return val
 
+def salary_estimate(row):
+    if row['cluster'] == 1:
+        val = random.randrange(60000, 85000, 500)
+    elif row['cluster'] == 2:
+        val = random.randrange(90000, 120000, 500)
+    elif row['cluster'] == 3:
+        val = random.randrange(75000, 90000, 500)
+    elif row['cluster'] == 4:
+        val = random.randrange(70000, 100000, 500)
+    else:
+        val = 1
+    return val
+
 
 labeled_data = unlabeled_data
 labeled_data['Cluster_Name'] = labeled_data.apply(cluster_names, axis=1)
 print('Data successfully labeled')
+
+labeled_data['Estimated_Salary'] = labeled_data.apply(salary_estimate, axis=1)
+print("Salary Estimates successfully generated")
 
 pandas_gbq.to_gbq(labeled_data, 'github_project.labeled_data_dev', project_id=project_id, if_exists='replace')
 # client.load_table_from_dataframe(labeled_data, labeled_data_ref).result()
