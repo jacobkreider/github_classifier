@@ -85,9 +85,9 @@ print(stats_cluster)
 
 def cluster_names(row):
     if row['cluster'] == 1:
-        val = 'Inexperienced Beginner'
-    elif row['cluster'] == 2:
         val = 'High Variety and Production, Balanced Language Use'
+    elif row['cluster'] == 2:
+        val = 'Inexperienced Beginner'
     elif row['cluster'] == 3:
         val = 'Medium Variety, High Production, Python-Focused'
     elif row['cluster'] == 4:
@@ -98,9 +98,9 @@ def cluster_names(row):
 
 def salary_estimate(row):
     if row['cluster'] == 1:
-        val = random.randrange(60000, 85000, 500)
-    elif row['cluster'] == 2:
         val = random.randrange(90000, 120000, 500)
+    elif row['cluster'] == 2:
+        val = random.randrange(60000, 85000, 500)
     elif row['cluster'] == 3:
         val = random.randrange(75000, 90000, 500)
     elif row['cluster'] == 4:
@@ -117,8 +117,8 @@ print('Data successfully labeled')
 labeled_data['Estimated_Salary'] = labeled_data.apply(salary_estimate, axis=1)
 print("Salary Estimates successfully generated")
 
-pandas_gbq.to_gbq(labeled_data, 'github_project.labeled_data_dev', project_id=project_id, if_exists='replace')
-# client.load_table_from_dataframe(labeled_data, labeled_data_ref).result()
+# pandas_gbq.to_gbq(labeled_data, 'github_project.labeled_data_dev', project_id=project_id, if_exists='replace')
+client.load_table_from_dataframe(labeled_data, labeled_data_ref).result()
 """
 labeled_data_1 = labeled_data.sample(frac=0.1, replace=False, random_state=42)
 labeled_data_2a = labeled_data.drop(labeled_data_1.index)
