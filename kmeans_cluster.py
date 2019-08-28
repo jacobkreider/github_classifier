@@ -117,8 +117,11 @@ print('Data successfully labeled')
 labeled_data['Estimated_Salary'] = labeled_data.apply(salary_estimate, axis=1)
 print("Salary Estimates successfully generated")
 
-# pandas_gbq.to_gbq(labeled_data, 'github_project.labeled_data_dev', project_id=project_id, if_exists='replace')
-client.load_table_from_dataframe(labeled_data, labeled_data_ref).result()
+labeled_data = labeled_data[['author', 'repo_count', 'commits', 'languages'
+                            , 'cluster', 'Cluster_Name', 'Estimated_Salary']]
+
+pandas_gbq.to_gbq(labeled_data, 'github_project.labeled_data_dev', project_id=project_id, if_exists='replace')
+# client.load_table_from_dataframe(labeled_data, labeled_data_ref).result()
 """
 labeled_data_1 = labeled_data.sample(frac=0.1, replace=False, random_state=42)
 labeled_data_2a = labeled_data.drop(labeled_data_1.index)
