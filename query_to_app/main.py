@@ -21,18 +21,19 @@ def main():
         SELECT *
         FROM (
             SELECT author, repo_count, commits, languages, cluster
-                , Cluster_Name, Rank()
+                , Cluster_Name, Estimated_Salary, Rank()
                 over (Partition BY Cluster_Name
-                ORDER BY commits DESC ) AS Rank
+                ORDER BY commits DESC, repo_count  DESC ) AS Rank
             FROM(
 
                 SELECT author, repo_count, commits, languages, cluster
-                    , Cluster_Name, row_number()
+                    , Cluster_Name, Estimated_Salary, row_number()
                     over (Partition BY author 
-                    ORDER BY commits DESC) as row_num
+                    ORDER BY Estimated_Salary DESC) as row_num
                 FROM github_project.labeled_data_dev)
                 WHERE row_num = 1)
-        WHERE Rank <= 10
+        WHERE Rank <= 10 AND Cluster_Name NOT IN ("MISSED SOMETHING"
+        , "Inexperienced Beginner")
         
     """
     )

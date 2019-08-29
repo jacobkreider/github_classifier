@@ -18,6 +18,7 @@ Good luck! </pre>
         <th>Total Repos</th>
         <th>Total Commits</th>
         <th>Number of Languages</th>
+        <th>Estimated Salary to Successfully Poach</th>
     </tr>
     {% for result in results %}
     <tr>
@@ -26,6 +27,7 @@ Good luck! </pre>
         <td align="center">{{ result[1] }}</td>
         <td align="center">{{ result[2] }}</td>
         <td align="center">{{ result[3] }}</td>
+        <td align="center">{{ result[6] }}</td>
     </tr>
     {% endfor %}
 </table>
